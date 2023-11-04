@@ -1,0 +1,17 @@
+{
+  "extends": "tsconfig/nextjs.json",
+  "include": [
+    "atoms",
+    "blocks",
+    "containers",
+    "elements",
+    "features",
+    "molecules",
+    "organisms",
+    "templates",
+    "themes"
+  ],
+  "compilerOptions": {
+    "allowJs": true
+  }
+}
