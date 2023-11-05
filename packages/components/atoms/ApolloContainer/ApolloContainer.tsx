@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://tailormeapi.azurewebsites.net/graphql/",
+  uri: "https://tailormeapi.azurewebsites.net/graphql",
   cache: new InMemoryCache(),
 });
 

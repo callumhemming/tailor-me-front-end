@@ -29,8 +29,8 @@ export const Input = ({
 );
 
 type SelectProps = {
-  register: UseFormRegisterReturn<any>;
-  options: Array<{ value: string | number; label: string }>;
+  register?: UseFormRegisterReturn<any>;
+  options: Array<{ value: string | number; label: string; selected?: boolean }>;
   label?: string;
   align?: "column" | "row";
 };
@@ -45,8 +45,10 @@ export const Select = ({
     {label && <label className={classes.label}>{label}</label>}
     {align === "column" && <hr className={classes.hr}></hr>}
     <select className={clsx(classes.input, classes.select)} {...register}>
-      {options.map(({ value, label }) => (
-        <option value={value}>{label}</option>
+      {options.map(({ value, label, selected }) => (
+        <option selected={selected} value={value}>
+          {label}
+        </option>
       ))}
     </select>
   </span>

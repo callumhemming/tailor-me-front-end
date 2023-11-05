@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { SubmitHandler, UseFormRegisterReturn, useForm } from "react-hook-form";
 import MultiStep from "react-multistep";
 import { Input, Select } from "../../atoms/Input";
@@ -25,10 +26,14 @@ export const Form = ({}: FormProps) => {
     formState: { errors },
   } = useForm<FormInputs>();
 
-  const { addUser } = useUser();
+  const { addUser, users, getAllUsers } = useUser();
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
 
   const { convertToMill } = useMeasurement();
-  const handleSubmit: SubmitHandler<FormInputs> = (data) => {
+  const handleSubmit: SubmitHandler<FormInputs> = async (data) => {
     const chestMeasurement = convertToMill(
       data.chestMeasurements.cent,
       data.chestMeasurements.milli
@@ -51,7 +56,8 @@ export const Form = ({}: FormProps) => {
       chestMeasurement: Number(chestMeasurement),
     };
 
-    addUser(payload);
+    await addUser(payload);
+    getAllUsers();
   };
 
   const registrations: Record<string, UseFormRegisterReturn<any>> = {
@@ -84,41 +90,43 @@ export const BaseForm = ({ onSubmit, registrations }: BaseFormProps) => {
   const ages = useAgeRange();
   const { centOptions, milliOptions } = useMeasurement();
   return (
-    <MultiStep
-      prevButton={{
-        style: {
-          padding: "12px 24px",
-          marginLeft: "90px",
-        },
-      }}
-      nextButton={{
-        style: {
-          padding: "12px 24px",
-        },
-      }}
-    >
-      <StepOne
-        username={registrations.username}
-        firstName={registrations.firstName}
-        lastName={registrations.lastName}
-      />
-      <StepTwo age={registrations.age} options={ages} />
-      <StepThree
-        chestCent={registrations.chestCent}
-        chestMilli={registrations.chestMilli}
-        waistCent={registrations.waistCent}
-        waistMilli={registrations.wasitMilli}
-        hipCent={registrations.hipCent}
-        hipMilli={registrations.hipMilli}
-        centOptions={centOptions}
-        milliOptions={milliOptions}
-      />
-      <form className={classes.subContainer} onSubmit={onSubmit}>
-        <button className={classes.submit} type="submit">
-          Submit
-        </button>
-      </form>
-    </MultiStep>
+    <div className={classes.root}>
+      <MultiStep
+        prevButton={{
+          style: {
+            padding: "12px 24px",
+            marginLeft: "90px",
+          },
+        }}
+        nextButton={{
+          style: {
+            padding: "12px 24px",
+          },
+        }}
+      >
+        <StepOne
+          username={registrations.username}
+          firstName={registrations.firstName}
+          lastName={registrations.lastName}
+        />
+        <StepTwo age={registrations.age} options={ages} />
+        <StepThree
+          chestCent={registrations.chestCent}
+          chestMilli={registrations.chestMilli}
+          waistCent={registrations.waistCent}
+          waistMilli={registrations.wasitMilli}
+          hipCent={registrations.hipCent}
+          hipMilli={registrations.hipMilli}
+          centOptions={centOptions}
+          milliOptions={milliOptions}
+        />
+        <form className={classes.subContainer} onSubmit={onSubmit}>
+          <button className={classes.submit} type="submit">
+            Submit
+          </button>
+        </form>
+      </MultiStep>
+    </div>
   );
 };
 

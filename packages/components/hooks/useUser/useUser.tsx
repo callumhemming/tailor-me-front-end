@@ -1,4 +1,4 @@
-import { gql as gqlLit, useMutation } from "@apollo/client";
+import { gql as gqlLit, useMutation, useQuery } from "@apollo/client";
 
 type AddUserInput = {
   email: string;
@@ -14,19 +14,44 @@ const AddUserMutation = gqlLit`
   }
 `;
 
+const GET_ALL_USERS = gqlLit`
+query {
+  users {
+    userId
+    username
+    chestMeasurement
+    waistMeasurement
+    hipMeasurement
+    sizes {
+      brandName
+      sizeName
+    }
+  }
+}
+`;
+
 export const useUser = () => {
-  const [_addUser, { data, loading, error }] = useMutation(AddUserMutation);
+  const [_addUser, { data: addRes, loading: isAdding, error: addedError }] =
+    useMutation(AddUserMutation);
+
+  const {
+    loading: isFetching,
+    error: fetchError,
+    data: users,
+    refetch: getAllUsers,
+  } = useQuery(GET_ALL_USERS);
 
   const addUser = async (parms: AddUserInput) => {
-    console.log(AddUserMutation);
-    const res = await _addUser({ variables: { input: parms } });
-    console.log("VALUE>>", res);
+    _addUser({ variables: { input: parms } });
   };
 
   return {
     addUser,
-    user: data,
-    fetching: loading,
-    error,
+    addRes,
+    isAdding,
+    addedError,
+    users,
+    fetchError,
+    getAllUsers,
   };
 };
