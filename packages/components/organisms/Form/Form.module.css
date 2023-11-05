@@ -10,4 +10,22 @@
 
 .submit {
   padding: 8px 12px;
+  font-size: 80px;
+  margin: 0 auto;
+}
+
+.label {
+  font-size: 24px;
+}
+
+.selector {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.subContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
 }

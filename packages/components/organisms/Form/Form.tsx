@@ -1,3 +1,4 @@
+"use client";
 import { SubmitHandler, UseFormRegisterReturn, useForm } from "react-hook-form";
 import MultiStep from "react-multistep";
 import { Input, Select } from "../../atoms/Input";
@@ -28,15 +29,15 @@ export const Form = ({}: FormProps) => {
 
   const { convertToMill } = useMeasurement();
   const handleSubmit: SubmitHandler<FormInputs> = (data) => {
-    const chestMeasurements = convertToMill(
+    const chestMeasurement = convertToMill(
       data.chestMeasurements.cent,
       data.chestMeasurements.milli
     );
-    const hipMeasurements = convertToMill(
+    const hipMeasurement = convertToMill(
       data.hipMeasurements.cent,
       data.hipMeasurements.milli
     );
-    const waistMeasurements = convertToMill(
+    const waistMeasurement = convertToMill(
       data.waistMeasurements.cent,
       data.waistMeasurements.milli
     );
@@ -45,9 +46,9 @@ export const Form = ({}: FormProps) => {
       email: data.username,
       firstName: data.firstName,
       lastName: data.lastName,
-      waistMeasurements,
-      hipMeasurements,
-      chestMeasurements,
+      waistMeasurement: Number(waistMeasurement),
+      hipMeasurement: Number(hipMeasurement),
+      chestMeasurement: Number(chestMeasurement),
     };
 
     addUser(payload);
@@ -83,27 +84,41 @@ export const BaseForm = ({ onSubmit, registrations }: BaseFormProps) => {
   const ages = useAgeRange();
   const { centOptions, milliOptions } = useMeasurement();
   return (
-    <form onSubmit={onSubmit}>
-      <MultiStep>
-        <StepOne
-          username={registrations.username}
-          firstName={registrations.firstName}
-          lastName={registrations.lastName}
-        />
-        <StepTwo age={registrations.age} options={ages} />
-        <StepThree
-          chestCent={registrations.chestCent}
-          chestMilli={registrations.chestMilli}
-          waistCent={registrations.waistCent}
-          waistMilli={registrations.wasitMilli}
-          hipCent={registrations.hipCent}
-          hipMilli={registrations.hipMilli}
-          centOptions={centOptions}
-          milliOptions={milliOptions}
-        />
-        <button type="submit">Submit</button>
-      </MultiStep>
-    </form>
+    <MultiStep
+      prevButton={{
+        style: {
+          padding: "12px 24px",
+          marginLeft: "90px",
+        },
+      }}
+      nextButton={{
+        style: {
+          padding: "12px 24px",
+        },
+      }}
+    >
+      <StepOne
+        username={registrations.username}
+        firstName={registrations.firstName}
+        lastName={registrations.lastName}
+      />
+      <StepTwo age={registrations.age} options={ages} />
+      <StepThree
+        chestCent={registrations.chestCent}
+        chestMilli={registrations.chestMilli}
+        waistCent={registrations.waistCent}
+        waistMilli={registrations.wasitMilli}
+        hipCent={registrations.hipCent}
+        hipMilli={registrations.hipMilli}
+        centOptions={centOptions}
+        milliOptions={milliOptions}
+      />
+      <form className={classes.subContainer} onSubmit={onSubmit}>
+        <button className={classes.submit} type="submit">
+          Submit
+        </button>
+      </form>
+    </MultiStep>
   );
 };
 
@@ -136,8 +151,8 @@ const StepThree = ({
   milliOptions,
 }) => (
   <form className={classes.form}>
-    <span>
-      <label>Chest</label>
+    <span className={classes.selector}>
+      <label className={classes.label}>Chest:</label>
       <Select
         align="row"
         label="cm"
@@ -151,8 +166,8 @@ const StepThree = ({
         options={milliOptions}
       />
     </span>
-    <span>
-      <label>Waist</label>
+    <span className={classes.selector}>
+      <label className={classes.label}>Waist: </label>
       <Select
         align="row"
         label="cm"
@@ -166,8 +181,8 @@ const StepThree = ({
         options={milliOptions}
       />
     </span>
-    <span>
-      <label>Hip</label>
+    <span className={classes.selector}>
+      <label className={classes.label}>Hip: </label>
       <Select align="row" label="cm" register={hipCent} options={centOptions} />
       <Select
         align="row"

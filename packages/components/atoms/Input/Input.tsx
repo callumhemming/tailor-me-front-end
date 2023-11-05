@@ -16,8 +16,9 @@ export const Input = ({
   type = "text",
 }: InputProps) => (
   <span className={classes.inputContainer}>
-    <label>{label}</label>
+    <label className={classes.label}>{label}</label>
 
+    <hr className={classes.hr}></hr>
     <input
       placeholder={placeholder}
       {...register}
@@ -41,8 +42,9 @@ export const Select = ({
   align = "column",
 }: SelectProps) => (
   <span className={clsx(classes.inputContainer, classes[align])}>
-    {label && <label>{label}</label>}
-    <select {...register}>
+    {label && <label className={classes.label}>{label}</label>}
+    {align === "column" && <hr className={classes.hr}></hr>}
+    <select className={clsx(classes.input, classes.select)} {...register}>
       {options.map(({ value, label }) => (
         <option value={value}>{label}</option>
       ))}

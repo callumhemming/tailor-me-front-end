@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql as gqlLit, useMutation } from "@apollo/client";
 
 type AddUserInput = {
   email: string;
@@ -8,8 +8,8 @@ type AddUserInput = {
   waistMeasurement: number;
 };
 
-const AddUserMutation = gql`
-  mutation CreateUser($input: UserInput!) {
+const AddUserMutation = gqlLit`
+  mutation CreateUser($input: CreateUserModelInput!) {
     createUser(userModel: $input)
   }
 `;
@@ -18,7 +18,9 @@ export const useUser = () => {
   const [_addUser, { data, loading, error }] = useMutation(AddUserMutation);
 
   const addUser = async (parms: AddUserInput) => {
-    await _addUser({ variables: { input: parms } });
+    console.log(AddUserMutation);
+    const res = await _addUser({ variables: { input: parms } });
+    console.log("VALUE>>", res);
   };
 
   return {
