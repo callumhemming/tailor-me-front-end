@@ -1,6 +1,7 @@
 {
   "extends": "tsconfig/nextjs.json",
   "include": [
+    "hooks",
     "atoms",
     "blocks",
     "containers",
