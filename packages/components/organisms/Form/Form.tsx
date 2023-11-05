@@ -1,13 +1,16 @@
 import { SubmitHandler, UseFormRegisterReturn, useForm } from "react-hook-form";
+import MultiStep from "react-multistep";
+import { Input, Select } from "../../atoms/Input";
+import { useAgeRange, useMeasurement } from "../../hooks";
 import classes from "./Form.module.css";
 type FormInputs = {
   username: string;
   firstName: string;
   lastName: string;
   age: number;
-  chestMeasurments: string;
-  waistMeasurments: string;
-  hipMeasurments: string;
+  chestMeasurements: { cent: number; milli: number };
+  waistMeasurements: { cent: number; milli: number };
+  hipMeasurements: { cent: number; milli: number };
 };
 
 type FormProps = {};
@@ -30,100 +33,120 @@ export const Form = ({}: FormProps) => {
     firstName: register("firstName"),
     lastName: register("lastName"),
     age: register("age"),
-    chestMeasurments: register("chestMeasurments"),
-    waistMeasurments: register("waistMeasurments"),
-    hipMeasurments: register("hipMeasurments"),
+    chestCent: register("chestMeasurements.cent"),
+    chestMilli: register("chestMeasurements.milli"),
+    waistCent: register("waistMeasurements.cent"),
+    wasitMilli: register("waistMeasurements.milli"),
+    hipCent: register("hipMeasurements.cent"),
+    hipMilli: register("hipMeasurements.milli"),
   };
 
-  const registerForm = [
-    {
-      register: registrations.username,
-      label: "Username",
-      placeholder: "Add a username",
-    },
-    {
-      register: registrations.firstName,
-      label: "First name",
-      placeholder: "Add your first name",
-    },
-    {
-      register: registrations.lastName,
-      label: "Last name",
-      placeholder: "Add your last name",
-    },
-    {
-      register: registrations.age,
-      label: "Age",
-      placeholder: "How old are you?",
-    },
-    {
-      register: registrations.chestMeasurments,
-      label: "Chest measurements",
-      placeholder: "Chest measurements",
-    },
-    {
-      register: registrations.waistMeasurments,
-      label: "Waist measurements",
-      placeholder: "Waist measurements",
-    },
-    {
-      register: registrations.hipMeasurments,
-      label: "Hip Measurements",
-      placeholder: "Hip measurements",
-    },
-  ];
-
   return (
-    <BaseForm inputs={registerForm} onSubmit={submitHandler(handleSubmit)} />
+    <BaseForm
+      registrations={registrations}
+      onSubmit={submitHandler(handleSubmit)}
+    />
   );
 };
 
 type BaseFormProps = {
   onSubmit: () => void;
-  inputs: Array<{
-    register: UseFormRegisterReturn<any>;
-    label: string;
-    placeholder: string;
-  }>;
+  registrations: Record<string, UseFormRegisterReturn<any>>;
 };
 
-export const BaseForm = ({ onSubmit, inputs }: BaseFormProps) => (
-  <form
-    className={classes.form}
-    onSubmit={(e) => {
-      e.preventDefault();
-      onSubmit();
-    }}
-  >
-    {inputs.map(({ register, label, placeholder }) => (
-      <Input register={register} label={label} placeholder={placeholder} />
-    ))}
-    <button className={classes.submit} type="submit">
-      Submit!
-    </button>
+export const BaseForm = ({ onSubmit, registrations }: BaseFormProps) => {
+  const ages = useAgeRange();
+  const { centOptions, milliOptions } = useMeasurement();
+  return (
+    <MultiStep>
+      <StepOne
+        username={registrations.username}
+        firstName={registrations.firstName}
+        lastName={registrations.lastName}
+      />
+      <StepTwo age={registrations.age} options={ages} />
+      <StepThree
+        chestCent={registrations.chestCent}
+        chestMilli={registrations.chestMilli}
+        waistCent={registrations.waistCent}
+        waistMilli={registrations.wasitMilli}
+        hipCent={registrations.hipCent}
+        hipMilli={registrations.hipMilli}
+        centOptions={centOptions}
+        milliOptions={milliOptions}
+      />
+    </MultiStep>
+  );
+};
+
+const StepOne = ({ username, firstName, lastName }) => (
+  <form className={classes.form}>
+    <Input register={username} label="Username" placeholder="Add a username" />
+    <Input
+      register={firstName}
+      label="First name"
+      placeholder="Your first name"
+    />
+    <Input register={lastName} label="Last name" placeholder="Your last name" />
   </form>
 );
 
-type InputProps = {
-  label: string;
-  placeholder?: string;
-  type?: "text";
-  register: UseFormRegisterReturn<any>;
-};
+const StepTwo = ({ age, options }) => (
+  <form className={classes.form}>
+    <Select label="What's your age" register={age} options={options} />
+  </form>
+);
 
-const Input = ({
-  register,
-  label,
-  placeholder = label,
-  type = "text",
-}: InputProps) => (
-  <span className={classes.inputContainer}>
-    <label>{label}</label>
-    <input
-      placeholder={placeholder}
-      {...register}
-      className={classes.input}
-      type={type}
-    />
-  </span>
+const StepThree = ({
+  chestCent,
+  chestMilli,
+  waistCent,
+  waistMilli,
+  hipCent,
+  hipMilli,
+  centOptions,
+  milliOptions,
+}) => (
+  <form className={classes.form}>
+    <span>
+      <label>Chest</label>
+      <Select
+        align="row"
+        label="cm"
+        register={chestCent}
+        options={centOptions}
+      />
+      <Select
+        align="row"
+        label="mm"
+        register={chestMilli}
+        options={milliOptions}
+      />
+    </span>
+    <span>
+      <label>Waist</label>
+      <Select
+        align="row"
+        label="cm"
+        register={waistCent}
+        options={centOptions}
+      />
+      <Select
+        align="row"
+        label="mm"
+        register={waistMilli}
+        options={milliOptions}
+      />
+    </span>
+    <span>
+      <label>Hip</label>
+      <Select align="row" label="cm" register={hipCent} options={centOptions} />
+      <Select
+        align="row"
+        label="mm"
+        register={hipMilli}
+        options={milliOptions}
+      />
+    </span>
+  </form>
 );

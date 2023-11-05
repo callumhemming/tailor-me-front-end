@@ -130,9 +130,15 @@ importers:
       clsx:
         specifier: ^2.0.0
         version: 2.0.0
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
       react-hook-form:
         specifier: ^7.47.0
         version: 7.47.0(react@18.2.0)
+      react-multistep:
+        specifier: ^5.5.9
+        version: 5.5.9(csstype@3.1.2)(react@18.2.0)
       tsconfig:
         specifier: ^7.0.0
         version: 7.0.0
@@ -181,6 +187,16 @@ importers:
       typescript:
         specifier: ^4.5.2
         version: 4.9.5
+
+  packages/utils:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.34
+        version: 18.2.34
 
 packages:
 
@@ -4410,6 +4426,14 @@ packages:
       '@types/react': 18.2.5
     dev: true
 
+  /@types/react@18.2.34:
+    resolution: {integrity: sha512-U6eW/alrRk37FU/MS2RYMjx0Va2JGIVXELTODaTIYgvWGCV4Y4TfTUzG8DdmpDNIT0Xpj/R7GfyHOJJrDttcvg==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.3
+      csstype: 3.1.2
+    dev: true
+
   /@types/react@18.2.5:
     resolution: {integrity: sha512-RuoMedzJ5AOh23Dvws13LU9jpZHIc/k90AgmK7CecAYeWmSr3553L4u5rk4sWAPBuQosfT7HmTfG4Rg5o4nGEA==}
     dependencies:
@@ -6177,7 +6201,6 @@ packages:
 
   /csstype@3.1.2:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
-    dev: true
 
   /damerau-levenshtein@1.0.8:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
@@ -8056,6 +8079,14 @@ packages:
       merge2: 1.4.1
       slash: 4.0.0
     dev: true
+
+  /goober@2.1.13(csstype@3.1.2):
+    resolution: {integrity: sha512-jFj3BQeleOoy7t93E9rZ2de+ScC4lQICLwiAQmKMg9F6roKGaLSHoCDYKkWlSafg138jejvq/mTdvmnwDQgqoQ==}
+    peerDependencies:
+      csstype: ^3.0.10
+    dependencies:
+      csstype: 3.1.2
+    dev: false
 
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -10612,6 +10643,17 @@ packages:
   /react-is@18.1.0:
     resolution: {integrity: sha512-Fl7FuabXsJnV5Q1qIOQwx/sagGF18kogb4gpfcG4gjLBWO0WDiiz1ko/ExayuxE7InyQkBLkxRFG5oxY6Uu3Kg==}
     dev: true
+
+  /react-multistep@5.5.9(csstype@3.1.2)(react@18.2.0):
+    resolution: {integrity: sha512-UXb6IB+IoAx2lnYm49th4GYSon3Nkjq8pEc4m/rnzbfkQQuY6u+yQ1PXF4y9dgW2yIpFq4lQ8ofedWsqBHS80Q==}
+    peerDependencies:
+      react: 18.2.0
+    dependencies:
+      goober: 2.1.13(csstype@3.1.2)
+      react: 18.2.0
+    transitivePeerDependencies:
+      - csstype
+    dev: false
 
   /react-refresh@0.11.0:
     resolution: {integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==}
